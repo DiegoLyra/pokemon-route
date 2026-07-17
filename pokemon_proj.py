@@ -117,8 +117,10 @@ def tentar_mover(dx, dy):
     novo_x = x + dx
     novo_y = y + dy
 
-    if dx > 0: img_jogador_frente
-    elif dx < 0: img_jogador_atual = img_jogador_costas
+    if dx > 0: 
+        img_jogador_atual = img_jogador_frente
+    elif dx < 0: 
+        img_jogador_atual = img_jogador_costas
 
     if 0 <= novo_x < len(matriz_mapa) and 0 <= novo_y < len(matriz_mapa[0]):
         bloco = matriz_mapa[novo_x][novo_y]

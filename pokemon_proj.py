@@ -52,8 +52,11 @@ pokedex = {}
 estado_jogo = "MENU_INICIAL"  
 pokemon_atual = None
 mensagem_batalha = ""
-
 frames_bump = 0  
+
+# --- CORREÇÃO: VARIÁVEIS DA POKÉDEX INICIALIZADAS ---
+indice_pokedex = 0
+visualizar_detalhes = False
 
 matriz_mapa = [
     ['A','A','A','A','A',' ',' ','A','A','A','A','A'],
@@ -97,7 +100,7 @@ def desenhar_mapa():
         frames_bump -= 1
 
 def pokemon_apareceu():
-    global estado_jogo, pokemon_atual, mensagem_batalha
+    global estado_jogo, pokemon_atual, message_batalha, mensagem_batalha
     if random.random() < 0.25:
         estado_jogo = "BATALHA"
         pokemon_atual = random.choice(especies)
@@ -126,7 +129,7 @@ def desenhar_menu_inicial():
     titulo = fonte_grande.render("POKÉMON RPG", True, (255, 215, 0))
     instrucao1 = fonte.render("Pressione [ESPAÇO] para Iniciar", True, (255, 255, 255))
     instrucao2 = fonte.render("[C] Como Jogar", True, (0, 255, 255))
-    instrucao3 = fonte.render("Pressione [ESC] para Sair", True, (200, 200, 200))
+    instrucao3 = fonte.render("Pressione [ESC] ou [0] para Sair", True, (200, 200, 200))
     
     tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 150))
     tela.blit(instrucao1, (LARGURA_TELA // 2 - instrucao1.get_width() // 2, 280))
@@ -165,7 +168,7 @@ def desenhar_menu_opcoes():
     opcoes = [
         "[5] Abrir Pokédex",
         "[M] Voltar ao Jogo",
-        "[ESC] Sair do Jogo"
+        "[0] Sair do Jogo"
     ]
     
     linha_y = 220
@@ -188,7 +191,8 @@ def desenhar_tela_batalha():
 def desenhar_tela_pokedex():
     tela.fill((25, 25, 35))
     titulo = fonte_grande.render("POKÉDEX SISTEMA", True, (255, 215, 0))
-    tela.blit(titulo, (20, 20))
+    titulo_rect = titulo.get_rect(topleft=(20, 20))
+    tela.blit(titulo, titulo_rect)
     
     controles = "Setas: Navegar | [D]: Ver Detalhes | [X]: Apagar | [BACKSPACE]: Sair"
     txt_ctrl = fonte.render(controles, True, (0, 255, 255))
@@ -211,7 +215,7 @@ def desenhar_tela_pokedex():
         cor = (255, 255, 0) if i == indice_pokedex else (255, 255, 255)
         
         txt_nome = fonte.render(f"{prefixo}{pkmn}", True, cor)
-        tela.blit(txt_nome, (20, linha_y))
+        tela.blit(txt_nome, (20, line_y := linha_y))
         linha_y += 30
 
     if visualizar_detalhes and lista_pokemons:
@@ -241,7 +245,8 @@ while rodando:
             rodando = False
             
         elif evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_ESCAPE:
+            # --- ADICIONADO: BOTÃO GLOBAL DE FECHAR (ESC, 0 OU 0 DO NUMPAD) ---
+            if evento.key in (pygame.K_ESCAPE, pygame.K_0, pygame.K_KP0):
                 rodando = False
             
             if estado_jogo == "MENU_INICIAL":

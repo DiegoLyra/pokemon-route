@@ -4,6 +4,7 @@ import sys
 
 pygame.init()
 pygame.font.init()
+pygame.mixer.init()
 
 LARGURA_TILE = 32
 ALTURA_TILE = 32
@@ -45,6 +46,13 @@ IMAGENS_POKEMONS = {
 for pkmn in IMAGENS_POKEMONS:
     IMAGENS_POKEMONS[pkmn] = pygame.transform.scale(IMAGENS_POKEMONS[pkmn], (64, 64))
 
+pygame.mixer.music.load("sons_pokemon/musica_fundo.wav")
+pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.play(-1)
+
+som_bump = pygame.mixer.Sound("sons_pokemon/som_bump.wav")
+som_bump.set_volume(0.6)
+
 x, y = 19, 6
 especies = list(IMAGENS_POKEMONS.keys())
 pokedex = {}
@@ -53,8 +61,6 @@ estado_jogo = "MENU_INICIAL"
 pokemon_atual = None
 mensagem_batalha = ""
 frames_bump = 0  
-
-# --- CORREÇÃO: VARIÁVEIS DA POKÉDEX INICIALIZADAS ---
 indice_pokedex = 0
 visualizar_detalhes = False
 
@@ -100,7 +106,7 @@ def desenhar_mapa():
         frames_bump -= 1
 
 def pokemon_apareceu():
-    global estado_jogo, pokemon_atual, message_batalha, mensagem_batalha
+    global estado_jogo, pokemon_atual, mensagem_batalha
     if random.random() < 0.25:
         estado_jogo = "BATALHA"
         pokemon_atual = random.choice(especies)
@@ -111,7 +117,7 @@ def tentar_mover(dx, dy):
     novo_x = x + dx
     novo_y = y + dy
 
-    if dx > 0: img_jogador_atual = img_jogador_frente
+    if dx > 0: img_jogador_frente
     elif dx < 0: img_jogador_atual = img_jogador_costas
 
     if 0 <= novo_x < len(matriz_mapa) and 0 <= novo_y < len(matriz_mapa[0]):
@@ -123,6 +129,7 @@ def tentar_mover(dx, dy):
                 pokemon_apareceu()
         else:
             frames_bump = 15
+            som_bump.play()
 
 def desenhar_menu_inicial():
     tela.fill((10, 30, 50))
@@ -245,7 +252,6 @@ while rodando:
             rodando = False
             
         elif evento.type == pygame.KEYDOWN:
-            # --- ADICIONADO: BOTÃO GLOBAL DE FECHAR (ESC, 0 OU 0 DO NUMPAD) ---
             if evento.key in (pygame.K_ESCAPE, pygame.K_0, pygame.K_KP0):
                 rodando = False
             
@@ -325,5 +331,6 @@ while rodando:
     pygame.display.flip()
     clock.tick(30)
 
+pygame.mixer.quit()
 pygame.quit()
 sys.exit()

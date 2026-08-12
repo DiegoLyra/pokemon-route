@@ -203,10 +203,14 @@ def desenhar_tela_pokedex():
     titulo_rect = titulo.get_rect(topleft=(20, 20))
     tela.blit(titulo, titulo_rect)
     
-    controles = "Setas: Navegar | [D]: Ver Detalhes | [X]: Apagar | [BACKSPACE]: Sair"
-    txt_ctrl = fonte.render(controles, True, (0, 255, 255))
-    tela.blit(txt_ctrl, (20, 55))
-    
+    controles1 = "Setas: Navegar  |  [D]: Detalhes  |  [X]: Apagar"
+    controles2 = "[BACKSPACE]: Sair"
+
+    txt_ctrl1 = fonte.render(controles1, True, (0, 255, 255))
+    txt_ctrl2 = fonte.render(controles2, True, (0, 255, 255))
+    tela.blit(txt_ctrl1, (20, 55))
+    tela.blit(txt_ctrl2, (20, 80))
+
     lista_pokemons = list(pokedex.keys())
     
     if not lista_pokemons:

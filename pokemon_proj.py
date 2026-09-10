@@ -2,6 +2,8 @@ import random
 import pygame
 import sys
 
+rng = random.SystemRandom()
+
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -107,9 +109,9 @@ def desenhar_mapa():
 
 def pokemon_apareceu():
     global estado_jogo, pokemon_atual, mensagem_batalha
-    if random.random() < 0.25:
+    if rng.random() < 0.25:
         estado_jogo = "BATALHA"
-        pokemon_atual = random.choice(especies)
+        pokemon_atual = rng.choice(especies)
         mensagem_batalha = f"Um {pokemon_atual} selvagem apareceu! \n[1] Capturar  |  [2] Correr"
 
 def tentar_mover(dx, dy):
@@ -310,16 +312,17 @@ while rodando:
                         mensagem_batalha = f"{pokemon_atual} já foi capturado antes!\n\nPressione [ESPAÇO] para continuar."
                     else:
                         pokedex[pokemon_atual] = {
-                            "HP": random.randint(10, 100), "Atk": random.randint(10, 100), "Def": random.randint(10, 100)
+                            "HP": rng.randint(10, 100),
+                            "Atk": rng.randint(10, 100),
+                            "Def": rng.randint(10, 100)
                         }
                         mensagem_batalha = f"{pokemon_atual} capturado com sucesso!\n\nPressione [ESPAÇO] para continuar."
                     estado_jogo = "FIM_BATALHA"
                 elif evento.key == pygame.K_2 or evento.key == pygame.K_KP2:
                     estado_jogo = "EXPLORANDO"
                     
-            elif estado_jogo == "FIM_BATALHA":
-                if evento.key == pygame.K_SPACE:
-                    estado_jogo = "EXPLORANDO"
+            elif estado_jogo == "FIM_BATALHA" and evento.key == pygame.K_SPACE:
+                estado_jogo = "EXPLORANDO"
 
     if estado_jogo == "MENU_INICIAL":
         desenhar_menu_inicial()

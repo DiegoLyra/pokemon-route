@@ -18,6 +18,9 @@ clock = pygame.time.Clock()
 fonte = pygame.font.SysFont("Arial", 16)
 fonte_grande = pygame.font.SysFont("Arial", 24, bold=True)
 
+logo_pokemon = pygame.image.load("imagens_pokemon/pokemon_logo.png").convert_alpha()
+logo_pokemon = pygame.transform.scale(logo_pokemon, (300, 110))
+
 IMAGENS_TILES = {
     ' ': pygame.image.load("imagens_pokemon/chao_pokemon.png/chao_poktest.png"),
     'A': pygame.image.load("imagens_pokemon/arvore_pokemon.png/arvore_pokemontest.png"),
@@ -137,12 +140,14 @@ def tentar_mover(dx, dy):
 
 def desenhar_menu_inicial():
     tela.fill((10, 30, 50))
-    titulo = fonte_grande.render("POKÉMON RPG", True, (255, 215, 0))
+
+    pos_x = (LARGURA_TELA - logo_pokemon.get_width()) // 2
+    tela.blit(logo_pokemon, (pos_x, 80))
+
     instrucao1 = fonte.render("Pressione [ESPAÇO] para Iniciar", True, (255, 255, 255))
     instrucao2 = fonte.render("[C] Como Jogar", True, (0, 255, 255))
     instrucao3 = fonte.render("Pressione [ESC] ou [0] para Sair", True, (200, 200, 200))
     
-    tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 150))
     tela.blit(instrucao1, (LARGURA_TELA // 2 - instrucao1.get_width() // 2, 280))
     tela.blit(instrucao2, (LARGURA_TELA // 2 - instrucao2.get_width() // 2, 330))
     tela.blit(instrucao3, (LARGURA_TELA // 2 - instrucao3.get_width() // 2, 380))
